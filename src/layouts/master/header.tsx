@@ -1,17 +1,7 @@
-import DropdownMenu from "@/components/DropdownMenu";
 import IconArrow from "@/components/Icon/arrow";
-import IconArrowOne from "@/components/Icon/arrow-one";
-import IconCardText from "@/components/Icon/card-text";
-import IconEnvelopOpen from "@/components/Icon/envelop-open";
-import IconLock from "@/components/Icon/lock";
-import IconLogOut from "@/components/Icon/logout";
-import IconQuestionCircle from "@/components/Icon/question-circle";
-import IconThreeDot from "@/components/Icon/three-dot";
-import OutsideDetectWrapper from "@/hocs/OutsideDetectWrapper";
-import { useUserStore } from "@/pages/authenticate/state";
-import { JSX, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
+import IconMenu from "@/components/Icon/menu";
+import { JSX, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface INavbar {
   route: string;
@@ -20,82 +10,66 @@ interface INavbar {
   childrens?: INavbar[];
 }
 
-interface IAccountMenu {
-  label: string;
-  icon: JSX.Element;
-  id: string;
-}
-
 const ListNavbar: INavbar[] = [
   {
     route: "/digital-product-passport",
-    label: "Order",
+    label: "Đặt bàn",
   },
   {
     route: "/business",
-    label: "Menu",
+    label: "Danh sách món ăn",
   },
-  {
-    route: "/qrcode",
-    label: "Contact",
-  },
-];
-
-const ListAccountMenu: IAccountMenu[] = [
-  {
-    label: "Thông tin tài khoản",
-    icon: <IconCardText />,
-    id: uuidv4(),
-  },
-  {
-    label: "Đổi mật khẩu",
-    icon: <IconLock />,
-    id: uuidv4(),
-  },
-  {
-    label: "Liên hệ",
-    icon: <IconEnvelopOpen />,
-    id: uuidv4(),
-  },
-  {
-    label: "Trợ giúp & Hỗ trợ",
-    icon: <IconQuestionCircle />,
-    id: uuidv4(),
-  },
-  {
-    label: "Đăng xuất",
-    icon: <IconLogOut />,
-    id: uuidv4(),
-  },
+  // {
+  //   route: "/qrcode",
+  //   label: "",
+  // },
 ];
 
 const navBarStyle = {
   padding: '10px !important',
 };
 
-const MasterHeader = () => {
-  const { user, getUserInformation } = useUserStore();
-  const [chooseNav, setChooseNav] = useState<string>("");
-  const [expandAccountMenu, setExpandAccountMenu] = useState<boolean>(false);
-  const navigate = useNavigate();
-  const route = useLocation();
 
-  useEffect(() => {
-    // if (route.pathname) {
-    //   setChooseNav(route.pathname);
-    // }
-  }, []);
+const MasterHeader = () => {
+  const [chooseNav, setChooseNav] = useState<string>("");
+  const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const sidebarRef = useRef(null);
+
+  // const handleClickOutside = (event: any) => {
+  //   if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+  //     setIsOpen(false); // Nếu click ngoài sidebar, đóng nó lại
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     // Chỉ thêm event listener khi sidebar đang mở
+  //     document.addEventListener('mousedown', handleClickOutside);
+  //   } else {
+  //     // Khi sidebar đóng, loại bỏ event listener
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   }
+  //   return () => {
+  //     // Cleanup khi component unmount
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, [isOpen]);
 
   const selectNav = (route: string) => () => {
     setChooseNav(route);
     navigate(route);
   };
 
-  useEffect(() => {
-    // if (!user) {
-    //   getUserInformation();
-    // }
-  }, [user]);
+  const toggleMenu = () => {
+    setIsOpen(prevState => !prevState); 
+  };
+
+
+  const linkHome = () => {
+    navigate('/')
+    setChooseNav('');
+  }
 
   const renderChildNav = (itemNav: INavbar) => {
     return (
@@ -116,7 +90,7 @@ const MasterHeader = () => {
   return (
     <div className="position-relative p-0">
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4 px-lg-5 py-3 py-lg-0 flex justify-content-between" style={navBarStyle}>
-        <a href="" className="navbar-brand p-0">
+        <a className="navbar-brand p-0 hover:cursor-pointer" onClick={linkHome}>
           <h1 className="text-primary m-0 ff-secondary"><i className="fa fa-utensils me-3"></i>Vua gà mạnh hoạch 999</h1>
         </a>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -150,10 +124,47 @@ const MasterHeader = () => {
               </div>
             ))}
           </div>
-          <div className="flex items-center gap-2 text-lg">
-            {/* {user?.name} */}
-            <i className="fa-solid fa-bars-sort"></i>
+          {/* {user?.name} */}
+          <div className="flex items-center gap-2 text-lg cursor-pointer menu-custom" onClick={toggleMenu}>
+            <IconMenu></IconMenu>
           </div>
+          {isOpen ?
+            <div className={`sidebar ${isOpen ? 'show-sidebar' : 'hide-sidebar'}`}>
+              <div className="side-inner">
+                <div className="profile">
+                  <img src="images/person_profile.jpg" alt="Image" className="img-fluid" />
+                  <h3 className="name">Debby Williams</h3>
+                  <span className="country">New York, USA</span>
+                </div>
+
+                <div className="counter d-flex justify-content-center">
+                  <div className="col">
+                    <strong className="number">892</strong>
+                    <span className="number-label">Posts</span>
+                  </div>
+                  <div className="col">
+                    <strong className="number">22.5k</strong>
+                    <span className="number-label">Followers</span>
+                  </div>
+                  <div className="col">
+                    <strong className="number">150</strong>
+                    <span className="number-label">Following</span>
+                  </div>
+                </div>
+
+                <div className="nav-menu">
+                  <ul>
+                    <li className="active"><a href="#"><span className="icon-home mr-3"></span>Feed</a></li>
+                    <li><a href="#"><span className="icon-search2 mr-3"></span>Explore</a></li>
+                    <li><a href="#"><span className="icon-notifications mr-3"></span>Notifications</a></li>
+                    <li><a href="#"><span className="icon-location-arrow mr-3"></span>Direct</a></li>
+                    <li><a href="#"><span className="icon-pie-chart mr-3"></span>Stats</a></li>
+                    <li><a href="#"><span className="icon-sign-out mr-3"></span>Sign out</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            : ''}
         </div>
 
       </nav>
@@ -163,11 +174,12 @@ const MasterHeader = () => {
           <div className="row align-items-center g-5">
             <div className="col-lg-6 text-center text-lg-start">
               {/* <h1 className="display-3 text-white animated slideInLeft">Enjoy Our<br>Delicious Meal</h1> */}
-              <p className="text-white animated slideInLeft mb-4 pb-2">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet</p>
+              <p className="text-white animated slideInLeft mb-4 pb-2">Vua Gà 999 – Hương vị gà Mạnh Hoạch trứ danh, thơm ngon từ từng thớ thịt, đậm đà đến từng miếng cắn,
+                mang đến trải nghiệm ẩm thực khó quên, gắn kết mọi bữa ăn của bạn!</p>
               <a href="" className="btn btn-primary py-sm-3 px-sm-5 me-3 animated slideInLeft">Book A Table</a>
             </div>
             <div className="col-lg-6 text-center text-lg-end overflow-hidden">
-              {/* <img className="img-fluid" src="img/hero.png" alt=""> */}
+              <img className="img-fluid w-50" src="../../src/assets/img/img_signature.png" alt="" />
             </div>
           </div>
         </div>
