@@ -1,0 +1,39 @@
+.rk-checkbox-wrapper input[type="checkbox"] {
+    /* removing default appearance */
+    -webkit-appearance: none;
+    appearance: none;
+    /* creating a custom design */
+    width: 14px;
+    height: 14px;
+    border: 1px solid #001FC5;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    top: 4px;
+}
+
+.rk-checkbox-wrapper input.rk-checked {
+    background-color: #001FC5;
+    box-shadow: 0 0 20px #001FC5;
+    /* position: relative; */
+}
+
+.rk-checkbox-wrapper input.rk-checked::before {
+    content: url("../public/assets/checked.svg");
+    /* font-size: 1.5em;
+    color: #fff; */
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    transform: translate(-50%, -50%);
+}
+
+.rk-checkbox-wrapper input[type="checkbox"]:disabled {
+    border-color: #c0c0c0;
+    background-color: #c0c0c0;
+}
+
+.rk-checkbox-wrapper input[type="checkbox"]:disabled+span {
+    color: #c0c0c0;
+}
