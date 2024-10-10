@@ -194,3 +194,19 @@
     transform: translateX(100%);
   }
 }
+
+.icon-close {
+  margin-top: 6px;
+  margin-left: 6px;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.icon-close svg:hover {
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.icon-close svg:focus {
+  outline: none;
+}

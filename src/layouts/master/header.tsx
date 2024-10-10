@@ -1,6 +1,7 @@
 import IconArrow from "@/components/Icon/arrow";
+import IconClose from "@/components/Icon/close";
 import IconMenu from "@/components/Icon/menu";
-import { JSX, useEffect, useRef, useState } from "react";
+import { JSX, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface INavbar {
@@ -34,7 +35,7 @@ const MasterHeader = () => {
   const [chooseNav, setChooseNav] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const sidebarRef = useRef(null);
+  // const sidebarRef = useRef(null);
 
   // const handleClickOutside = (event: any) => {
   //   if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
@@ -62,7 +63,7 @@ const MasterHeader = () => {
   };
 
   const toggleMenu = () => {
-    setIsOpen(prevState => !prevState); 
+    setIsOpen(prevState => !prevState);
   };
 
 
@@ -126,10 +127,13 @@ const MasterHeader = () => {
           </div>
           {/* {user?.name} */}
           <div className="flex items-center gap-2 text-lg cursor-pointer menu-custom" onClick={toggleMenu}>
-            <IconMenu></IconMenu>
+            <IconMenu />
           </div>
           {isOpen ?
             <div className={`sidebar ${isOpen ? 'show-sidebar' : 'hide-sidebar'}`}>
+              <div className={`icon-close ${isOpen ? 'show-sidebar' : 'hide-sidebar'}`} onClick={toggleMenu}>
+                <IconClose />
+              </div>
               <div className="side-inner">
                 <div className="profile">
                   <img src="images/person_profile.jpg" alt="Image" className="img-fluid" />
@@ -170,7 +174,7 @@ const MasterHeader = () => {
       </nav>
 
       <div className="py-5 bg-dark hero-header mb-5">
-        <div className="container my-5 py-5">
+        <div className="container">
           <div className="row align-items-center g-5">
             <div className="col-lg-6 text-center text-lg-start">
               {/* <h1 className="display-3 text-white animated slideInLeft">Enjoy Our<br>Delicious Meal</h1> */}
